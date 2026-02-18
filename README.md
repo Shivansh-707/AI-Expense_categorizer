@@ -2,7 +2,7 @@
 
 An end-to-end AI assistant for finance teams that takes a raw CSV of expenses, cleans it, auto‑categorizes each transaction, flags anomalies, and gives you interactive reports — plus an “Ask the AI” panel to query the dataset in plain English.[file:116][file:112]
 
-Live app: `<< add your Streamlit Cloud URL here >>`
+Live app: `https://ai-expense-categorizer.streamlit.app/`
 
 ---
 
@@ -135,7 +135,7 @@ High‑level flow:
 
 ### 1. Clone the repo
 
-```bash
+
 git clone https://github.com/Shivansh-707/AI-Expense_categorizer.git
 cd AI-Expense_categorizer
 2. Create & activate a virtual environment
@@ -204,12 +204,12 @@ Download outputs
 Download the enriched CSV, edited table CSV, and the PDF report from the Download Data section.
 
 7. Files of interest
-app.py — main Streamlit app with UI, LLM integration, anomaly detection, charts, and exports.[file:112]
+app.py — main Streamlit app with UI, LLM integration, anomaly detection, charts, and exports.
 
-main.py — utility / local runner script (if present in the repo setup).[file:115]
+main.py — utility / local runner script (if present in the repo setup)
 
-comprehensive_expenses.csv — sample dataset used for local testing and demo flows.[file:113]
+comprehensive_expenses.csv — sample dataset used for local testing and demo flows
 
-dataset_generator.py — helper script to generate synthetic expense data for experimentation.[file:114]
+dataset_generator.py — helper script to generate synthetic expense data for experimentation
 
-AI-Expense-Categorizer.docx — original assessment brief from E2M Solutions (for reference).[file:116]
+AI-Expense-Categorizer.docx — original assessment brief from E2M Solutions ( will not be uploaded here for privacy reasons ) 
