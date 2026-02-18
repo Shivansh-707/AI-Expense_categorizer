@@ -133,83 +133,88 @@ High‑level flow:
 - A Groq API key (used via the OpenAI-compatible client)  
 - Git + virtual environment (recommended)
 
+
 ### 1. Clone the repo
 
-
+```bash
 git clone https://github.com/Shivansh-707/AI-Expense_categorizer.git
 cd AI-Expense_categorizer
-2. Create & activate a virtual environment
-bash
+```
+
+### 2. Create & activate a virtual environment
+
+```bash
 python -m venv .venv
-source .venv/bin/activate      # on macOS / Linux
-# .venv\Scripts\activate       # on Windows
-3. Install dependencies
-bash
+
+# On macOS / Linux
+source .venv/bin/activate
+
+# On Windows
+# .venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
-4. Configure your API key
-Create a .env file in the project root:
+```
 
-bash
+### 4. Configure your API key
+
+Create a `.env` file in the project root:
+
+```bash
 GROQ_API_KEY=your_groq_api_key_here
-On Streamlit Cloud, the app instead reads GROQ_API_KEY from Secrets, so the code works both locally and in deployment without changes.[file:112]
+```
 
-5. Running the app locally
-bash
+On Streamlit Cloud, the app instead reads `GROQ_API_KEY` from **Secrets**, so the same code works both locally and in deployment without changes.
+
+### 5. Running the app locally
+
+```bash
 streamlit run app.py
-Then open the URL shown in the terminal (usually http://localhost:8501).
+```
 
-6. How to use the app
-Upload your CSV
+Then open the URL shown in the terminal (usually `http://localhost:8501`).
 
-Required columns: date, amount, description.
+---
 
-Optional columns like merchant, notes, currency are handled if present.
+### 6. How to use the app
 
-Run analysis
+#### Upload your CSV
+- Required columns: `date`, `amount`, `description`.
+- Optional columns like `merchant`, `notes`, `currency` are handled if present.
 
-Click “Run Analysis” in the sidebar.
+#### Run analysis
+- Click **"Run Analysis"** in the sidebar.
+- The app will:
+  - Clean and validate the data.
+  - Run rule-based anomaly checks.
+  - Call the LLM in batches to assign categories, suspicious flags, and confidence scores.
 
-The app will:
+#### Review & edit
+- Use the **"Review & Edit Categories"** table to spot-check and adjust categories or fields.
+- Click **"Apply edits & update analysis (no extra LLM)"** to refresh anomalies and charts based on your edits.
 
-Clean and validate the data.
+#### Explore the reports
+- Check the **Summary** section for top-level metrics.
+- Use the **Spending by Category** and **Monthly Trends** charts to understand patterns.
+- Inspect **Flagged Anomalies** for outliers and potential issues.
 
-Run rule‑based anomaly checks.
+#### Ask questions with AI
+- Scroll to **"Ask the AI about your expenses"**.
+- Type a question and hit **Ask**.
+- The app shows a running Q&A history so you can drill down with follow-ups.
 
-Call the LLM in batches to assign categories, suspicious flags, and confidence scores.
+#### Download outputs
+- Download the enriched CSV, edited table CSV, and the PDF report from the **Download Data** section.
 
-Review & edit
+---
 
-Use the “Review & Edit Categories” table to spot check and adjust categories or fields.
+### 7. Files of interest
 
-Click “Apply edits & update analysis (no extra LLM)” to refresh anomalies and charts based on your edits.
-
-Explore the reports
-
-Check the Summary section for top‑level metrics.
-
-Use the Spending by Category and Monthly Trends charts to understand patterns.
-
-Inspect Flagged Anomalies for outliers and potential issues.
-
-Ask questions with AI
-
-Scroll to “Ask the AI about your expenses”.
-
-Type a question and hit Ask.
-
-The app shows a running Q&A history so you can drill down with follow‑ups.
-
-Download outputs
-
-Download the enriched CSV, edited table CSV, and the PDF report from the Download Data section.
-
-7. Files of interest
-app.py — main Streamlit app with UI, LLM integration, anomaly detection, charts, and exports.
-
-main.py — utility / local runner script (if present in the repo setup)
-
-comprehensive_expenses.csv — sample dataset used for local testing and demo flows
-
-dataset_generator.py — helper script to generate synthetic expense data for experimentation
-
-AI-Expense-Categorizer.docx — original assessment brief from E2M Solutions ( will not be uploaded here for privacy reasons ) 
+- `app.py` — main Streamlit app with UI, LLM integration, anomaly detection, charts, and exports.
+- `main.py` — utility / local runner script.
+- `comprehensive_expenses.csv` — sample dataset used for local testing and demo flows.
+- `dataset_generator.py` — helper script to generate synthetic expense data for experimentation.
+- `AI-Expense-Categorizer.docx` — original assessment brief from E2M Solutions (not included in the repo for privacy reasons).
