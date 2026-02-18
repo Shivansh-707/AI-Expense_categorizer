@@ -30,7 +30,7 @@ CATEGORY_LIST = [
 ]
 
 BATCH_SIZE = 10
-MAX_LLM_ROWS = 40
+MAX_LLM_ROWS = 40  # demo safety: only first 40 rows go through the LLM
 
 # =============================
 # Groq setup
@@ -38,6 +38,7 @@ MAX_LLM_ROWS = 40
 
 @st.cache_resource
 def get_groq_client():
+    # Try Streamlit secrets first (deployed), fallback to .env (local)
     try:
         api_key = st.secrets["GROQ_API_KEY"]
     except Exception:
@@ -153,7 +154,7 @@ Return ONLY a JSON object with a "results" array containing objects:
     ]
 
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",   # ✅ active model
+        model="llama-3.1-8b-instant",
         messages=messages,
         response_format={"type": "json_object"},
         temperature=0.1,
@@ -194,6 +195,7 @@ def apply_llm_categorization(df: pd.DataFrame, client) -> pd.DataFrame:
         end = min(start + BATCH_SIZE, effective_n)
         batch = df.iloc[start:end]
 
+        # simple retry on rate limit / transient errors
         for attempt in range(3):
             try:
                 mapping = call_groq_for_batch(client, batch)
@@ -275,7 +277,7 @@ Do NOT invent data beyond what is in the JSON summary."""
     ]
 
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",   # ✅ active model
+        model="llama-3.1-8b-instant",
         messages=messages,
         temperature=0.2,
         max_tokens=300,
@@ -492,14 +494,55 @@ def main():
     # =============================
     st.subheader("Flagged Anomalies")
 
+    # Explain what the user is seeing
+    st.caption(
+        "Rows can be flagged either by rule-based checks, the AI model, or both. "
+        f"For this demo, AI review (category_llm, suspicious_llm, confidence_llm) "
+        f"is only run on the first {MAX_LLM_ROWS} rows, so later rows may have empty AI fields."
+    )
+
     anomaly_mask = (df_processed["is_anomaly_rule"]) | (df_processed.get("suspicious_llm", False))
-    anomalies = df_processed[anomaly_mask]
+    anomalies = df_processed[anomaly_mask].copy()
 
     if not anomalies.empty:
+        # Where did the flag come from?
+        anomalies["analysis_source"] = np.select(
+            [
+                anomalies["is_anomaly_rule"] & anomalies.get("suspicious_llm", False),
+                anomalies["is_anomaly_rule"],
+                anomalies.get("suspicious_llm", False),
+            ],
+            [
+                "Rule-based + AI",
+                "Rule-based only",
+                "AI only",
+            ],
+            default="Unknown",
+        )
+
+        # Combine rule-based and AI reasons into one readable text
+        def _combine_reasons(row):
+            parts = []
+            if isinstance(row.get("anomaly_reasons_rule"), str) and row["anomaly_reasons_rule"].strip():
+                parts.append(row["anomaly_reasons_rule"].strip())
+            if isinstance(row.get("suspicious_reason_llm"), str) and row["suspicious_reason_llm"].strip():
+                parts.append("AI: " + row["suspicious_reason_llm"].strip())
+            return " | ".join(parts)
+
+        anomalies["combined_reason"] = anomalies.apply(_combine_reasons, axis=1)
+
+        # Nice-looking confidence (blank if NaN)
+        anomalies["confidence_display"] = anomalies["confidence_llm"].round(2)
+
         anomaly_cols = [
-            "date", "amount", "merchant", "description",
-            "anomaly_reasons_rule", "suspicious_llm",
-            "suspicious_reason_llm", "category_llm", "confidence_llm",
+            "date",
+            "amount",
+            "merchant",
+            "description",
+            "analysis_source",
+            "combined_reason",
+            "category_llm",
+            "confidence_display",
         ]
         existing_anomaly_cols = [c for c in anomaly_cols if c in anomalies.columns]
         st.dataframe(anomalies[existing_anomaly_cols], use_container_width=True)
