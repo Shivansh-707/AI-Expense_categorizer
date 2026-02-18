@@ -300,8 +300,11 @@ def generate_pdf_report(df: pd.DataFrame) -> bytes:
         pdf.multi_cell(0, 6, line)
         pdf.ln(1)
 
-    pdf_bytes = pdf.output(dest="S").encode("latin1")
-    return pdf_bytes
+    output = pdf.output(dest="S")
+    if isinstance(output, bytes):
+        return output
+    else:
+        return output.encode("latin1")
 
 
 # =============================
