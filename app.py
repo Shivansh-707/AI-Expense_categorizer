@@ -29,8 +29,8 @@ CATEGORY_LIST = [
     "Other",
 ]
 
-BATCH_SIZE = 10          # smaller batch size to reduce tokens per request
-MAX_LLM_ROWS = 40        # only first N rows go through LLM on hosted demo
+BATCH_SIZE = 10
+MAX_LLM_ROWS = 40
 
 # =============================
 # Groq setup
@@ -38,7 +38,6 @@ MAX_LLM_ROWS = 40        # only first N rows go through LLM on hosted demo
 
 @st.cache_resource
 def get_groq_client():
-    # Try Streamlit secrets first (deployed), fallback to .env (local)
     try:
         api_key = st.secrets["GROQ_API_KEY"]
     except Exception:
@@ -154,7 +153,7 @@ Return ONLY a JSON object with a "results" array containing objects:
     ]
 
     response = client.chat.completions.create(
-        model="llama3-8b-8192",  # lighter model with higher rate limits
+        model="llama-3.1-8b-instant",   # ✅ active model
         messages=messages,
         response_format={"type": "json_object"},
         temperature=0.1,
@@ -195,7 +194,6 @@ def apply_llm_categorization(df: pd.DataFrame, client) -> pd.DataFrame:
         end = min(start + BATCH_SIZE, effective_n)
         batch = df.iloc[start:end]
 
-        # simple retry on rate limit
         for attempt in range(3):
             try:
                 mapping = call_groq_for_batch(client, batch)
@@ -219,7 +217,7 @@ def apply_llm_categorization(df: pd.DataFrame, client) -> pd.DataFrame:
                 df.at[row_index, "confidence_llm"] = info["confidence_llm"]
 
         progress.progress(end / effective_n, text=f"Categorized {end}/{effective_n} transactions...")
-        time.sleep(1)  # polite delay between batches
+        time.sleep(1)
 
     progress.empty()
     return df
@@ -277,7 +275,7 @@ Do NOT invent data beyond what is in the JSON summary."""
     ]
 
     response = client.chat.completions.create(
-        model="llama3-8b-8192",
+        model="llama-3.1-8b-instant",   # ✅ active model
         messages=messages,
         temperature=0.2,
         max_tokens=300,
@@ -287,7 +285,7 @@ Do NOT invent data beyond what is in the JSON summary."""
 
 
 # =============================
-# PDF export (fixed for fpdf2 v2+)
+# PDF export
 # =============================
 
 def generate_pdf_report(df: pd.DataFrame) -> bytes:
@@ -298,9 +296,9 @@ def generate_pdf_report(df: pd.DataFrame) -> bytes:
 
     cat_summary = (
         df.groupby("category_llm")["amount"]
-            .sum()
-            .sort_values(ascending=False)
-            .reset_index()
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
     )
 
     pdf = FPDF()
@@ -334,7 +332,6 @@ def generate_pdf_report(df: pd.DataFrame) -> bytes:
         pdf.multi_cell(0, 6, line)
         pdf.ln(1)
 
-    # ✅ Fixed: works on both local and Streamlit Cloud
     return bytes(pdf.output())
 
 
