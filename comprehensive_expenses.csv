@@ -1,0 +1,102 @@
+transaction_id,date,merchant,description,amount,currency,payment_method,location,notes
+TXN1027,2025-01-01,OpenAI API,OpenAI API,19.46,USD,Bank Transfer,"San Francisco, CA",
+TXN1069,2025-01-24,Target,Target,56.58,USD,Cash,"Chicago, IL",
+TXN1062,2025-02-21,Electric Co,Electric Co,107.53,USD,Bank Transfer,"San Francisco, CA",
+TXN1034,2025-02-17,Walmart,Walmart,36.6,USD,Debit Card,"Austin, TX",
+TXN1065,2025-01-12,GitHub,GitHub,125.79,USD,Bank Transfer,"New York, NY",
+TXN1063,2025-01-04,AWS,AWS,87.82,USD,Cash,"San Francisco, CA",Business expense
+TXN1018,2025-02-21,Marriott Hotel,Marriott Hotel,360.91,USD,Credit Card,"Austin, TX",
+TXN1075,2025-02-08,Amazon Business,Amazon Business,95.94,USD,Credit Card,"Boston, MA",
+TXN1007,2025-01-08,Pizza Hut,Pizza Hut,23.42,USD,Bank Transfer,"Chicago, IL",
+TXN1079,2025-01-08,Uber,Uber,112.46,USD,Cash,"Boston, MA",
+TXN1074,2025-01-12,Electric Co,Electric Co,20.09,USD,Credit Card,"Austin, TX",
+TXN1006,2025-01-09,Uber,Uber,387.11,USD,Debit Card,"Boston, MA",Business expense
+TXN1008,2025-01-06,Pizza Hut,Pizza Hut,93.09,USD,Debit Card,"San Francisco, CA",
+TXN1066,2025-02-15,Walmart,Walmart,17.63,USD,Debit Card,"Boston, MA",Business expense
+TXN1024,2025-01-24,Chipotle,Chipotle,39.64,USD,Bank Transfer,"Chicago, IL",
+TXN1015,2025-03-03,Pizza Hut,Pizza Hut,50.79,USD,Cash,"Boston, MA",
+TXN1041,2025-01-30,CVS Pharmacy,CVS Pharmacy,97.43,USD,Credit Card,"Austin, TX",
+TXN1055,2025-01-17,Target,Target,45.53,USD,Cash,"Chicago, IL",
+TXN1012,2025-03-30,Marriott Hotel,Marriott Hotel,86.98,USD,Bank Transfer,"New York, NY",
+TXN1021,2025-01-30,Microsoft 365,Microsoft 365,40.19,USD,Debit Card,"Chicago, IL",
+TXN2002,15-Feb-2025,Best Buy,Best Buy Electronics,199.99,USD,Debit Card,"Chicago, IL",Office supplies
+TXN1048,2025-02-11,United Airlines,United Airlines,159.81,USD,Bank Transfer,"San Francisco, CA",
+TXN1085,2025-03-26,GitHub,GitHub,135.3,USD,Bank Transfer,"Austin, TX",Business expense
+TXN1019,2025-01-29,Starbucks,Starbucks,69.38,USD,Cash,"Boston, MA",Business expense
+TXN2003,2025-02-20,Suspicious Vendor LLC,Large Equipment Purchase,9500.0,USD,Bank Transfer,"Austin, TX",Urgent purchase
+TXN1030,2025-03-11,Staples,Staples,45.29,USD,Cash,"Boston, MA",
+TXN1051,2025-01-25,Chipotle,Chipotle,13.95,USD,Debit Card,"Boston, MA",
+TXN1035,2025-01-19,Payroll - Employee,Payroll - Employee,3377.41,USD,Cash,"Chicago, IL",
+TXN1009,2025-02-03,United Airlines,United Airlines,315.67,USD,Debit Card,"Austin, TX",
+TXN1084,2025-01-06,Pizza Hut,Pizza Hut,68.12,USD,Debit Card,"Austin, TX",
+TXN1028,2025-03-09,McDonald's,McDonald's,36.63,USD,Bank Transfer,"Chicago, IL",
+TXN1060,2025-03-03,Marriott Hotel,Marriott Hotel,40.27,USD,Cash,"Boston, MA",
+TXN1057,2025-02-03,United Airlines,United Airlines,83.66,USD,Cash,"New York, NY",
+TXN1040,2025-03-27,Microsoft 365,Microsoft 365,83.69,USD,Bank Transfer,"Boston, MA",
+TXN1039,2025-02-17,Staples,Staples,64.33,USD,Cash,"Chicago, IL",
+TXN1023,2025-03-11,Staples,Staples,43.53,USD,Cash,"Chicago, IL",
+TXN1032,2025-02-08,Uber,Uber,284.1,USD,Debit Card,"New York, NY",
+TXN1042,2025-02-17,Payroll - Employee,Payroll - Employee,3460.37,USD,Bank Transfer,"Austin, TX",Business expense
+TXN1026,2025-02-25,McDonald's,McDonald's,88.35,USD,Credit Card,"Chicago, IL",
+TXN1088,2025-01-28,Target,Target,60.12,USD,Credit Card,"San Francisco, CA",Business expense
+TXN1058,2025-03-05,Pizza Hut,Pizza Hut,66.84,USD,Bank Transfer,"Boston, MA",
+TXN1017,2025-01-27,GitHub,GitHub,49.57,USD,Credit Card,"San Francisco, CA",Business expense
+TXN1078,2025-01-09,Uber,Uber,108.47,USD,Debit Card,"Chicago, IL",
+TXN1045,2025-03-28,Uber,Uber,169.41,USD,Credit Card,"Chicago, IL",Business expense
+TXN1093,2025-03-06,Shell Gas Station,Shell Gas Station,166.17,USD,Debit Card,"New York, NY",
+TXN1037,2025-03-30,Comcast Internet,Comcast Internet,50.95,USD,Bank Transfer,"New York, NY",Business expense
+TXN1070,2025-01-24,McDonald's,McDonald's,37.5,USD,Bank Transfer,"Boston, MA",Business expense
+TXN1010,2025-03-03,Target,Target,31.56,USD,Cash,"Boston, MA",
+TXN1001,2025-01-24,Marriott Hotel,Marriott Hotel,197.22,USD,Bank Transfer,"Boston, MA",
+TXN1013,2025-03-22,Shell Gas Station,Shell Gas Station,30.28,USD,Cash,"Chicago, IL",
+TXN2006,2025-03-01,Refund Processing,Refund,-150.0,USD,Credit Card,"Boston, MA",Return
+TXN1087,2025-01-03,AWS,AWS,109.08,USD,Cash,"New York, NY",
+TXN1014,2025-02-10,Water Department,Water Department,49.43,USD,Cash,"New York, NY",
+TXN1089,2025-01-28,OpenAI API,OpenAI API,45.97,USD,Cash,"Boston, MA",
+TXN1046,2025-03-08,GitHub,GitHub,128.97,USD,Cash,"San Francisco, CA",
+TXN1047,2025-01-02,Target,Target,37.96,USD,Debit Card,"New York, NY",
+TXN1083,2025-03-18,Amazon Business,Amazon Business,92.06,USD,Cash,"New York, NY",
+TXN1056,2025-03-03,Uber,Uber,94.13,USD,Bank Transfer,"New York, NY",
+TXN1059,2025-02-20,Pizza Hut,Pizza Hut,72.26,USD,Credit Card,"New York, NY",
+TXN1029,2025-03-11,McDonald's,McDonald's,50.46,USD,Debit Card,"Chicago, IL",
+TXN1092,2025-02-25,AWS,AWS,71.46,USD,Debit Card,"San Francisco, CA",
+TXN1043,2025-01-30,Electric Co,Electric Co,119.4,USD,Credit Card,"Boston, MA",
+TXN1067,2025-01-26,Electric Co,Electric Co,82.13,USD,Debit Card,"San Francisco, CA",
+TXN1094,2025-01-27,Staples,Staples,116.69,USD,Credit Card,"Boston, MA",Business expense
+TXN1011,2025-03-30,Starbucks,Starbucks,74.54,USD,Cash,"Austin, TX",
+TXN1049,2025-01-07,Payroll - Employee,Payroll - Employee,4826.48,USD,Credit Card,"Austin, TX",
+TXN2001,2025-02-15,Unknown Store,,75.5,USD,Credit Card,"New York, NY",
+TXN1053,2025-01-05,AWS,AWS,51.66,USD,Bank Transfer,"Austin, TX",
+TXN1081,2025-02-08,Uber,Uber,166.75,USD,Bank Transfer,"San Francisco, CA",
+TXN1025,2025-03-03,AWS,AWS,69.52,USD,Credit Card,"San Francisco, CA",
+TXN1038,2025-02-04,United Airlines,United Airlines,207.11,USD,Cash,"Boston, MA",Business expense
+TXN1071,2025-01-30,Comcast Internet,Comcast Internet,93.0,USD,Credit Card,"New York, NY",
+TXN1033,2025-02-11,Office Depot,Office Depot,111.72,USD,Bank Transfer,"Austin, TX",Business expense
+TXN1031,2025-03-08,Pizza Hut,Pizza Hut,11.82,USD,Bank Transfer,"Chicago, IL",
+TXN1064,2025-01-12,GitHub,GitHub,123.13,USD,Debit Card,"Chicago, IL",
+TXN1061,2025-02-02,Shell Gas Station,Shell Gas Station,327.59,USD,Debit Card,"Boston, MA",
+TXN1003,2025-02-28,Microsoft 365,Microsoft 365,18.11,USD,Bank Transfer,"San Francisco, CA",Business expense
+TXN1076,2025-02-04,Marriott Hotel,Marriott Hotel,45.95,USD,Bank Transfer,"Boston, MA",
+TXN1044,2025-02-15,Staples,Staples,112.12,USD,Credit Card,"Chicago, IL",
+TXN1050,2025-03-17,Water Department,Water Department,97.54,USD,Bank Transfer,"Austin, TX",
+TXN2005,2025-01-25,Starbucks,Starbucks Coffee,45.67,USD,Credit Card,"San Francisco, CA",Team meeting
+TXN1072,2025-01-19,Office Depot,Office Depot,42.74,USD,Credit Card,"Austin, TX",Business expense
+TXN1077,2025-02-27,Shell Gas Station,Shell Gas Station,283.01,USD,Cash,"New York, NY",Business expense
+TXN1016,2025-02-16,Comcast Internet,Comcast Internet,71.74,USD,Debit Card,"Chicago, IL",
+TXN1082,2025-02-27,Marriott Hotel,Marriott Hotel,120.13,USD,Cash,"Austin, TX",
+TXN1086,2025-02-16,Microsoft 365,Microsoft 365,25.18,USD,Credit Card,"New York, NY",
+TXN1073,2025-03-19,Walmart,Walmart,45.12,USD,Bank Transfer,"Austin, TX",
+TXN1036,2025-03-16,Starbucks,Starbucks,80.62,USD,Credit Card,"Austin, TX",
+TXN1090,2025-03-14,Target,Target,13.55,USD,Credit Card,"Boston, MA",
+TXN1022,2025-01-01,Uber,Uber,144.25,USD,Credit Card,"Chicago, IL",
+TXN1052,2025-02-11,Payroll - Employee,Payroll - Employee,3500.5,USD,Debit Card,"Chicago, IL",Business expense
+TXN1002,2025-03-01,Office Depot,Office Depot,10.09,USD,Credit Card,"New York, NY",
+TXN1004,2025-02-16,CVS Pharmacy,CVS Pharmacy,60.17,USD,Debit Card,"Chicago, IL",
+TXN1068,2025-03-16,Chipotle,Chipotle,23.0,USD,Credit Card,"Austin, TX",
+TXN1080,2025-02-14,Amazon Business,Amazon Business,109.85,USD,Cash,"Austin, TX",
+TXN1091,2025-02-04,Electric Co,Electric Co,24.65,USD,Credit Card,"San Francisco, CA",
+TXN1005,2025-02-20,Walmart,Walmart,15.11,USD,Bank Transfer,"Boston, MA",
+TXN1054,2025-02-24,United Airlines,United Airlines,227.74,USD,Cash,"Austin, TX",Business expense
+TXN1020,2025-02-11,McDonald's,McDonald's,106.85,USD,Credit Card,"New York, NY",Business expense
+TXN1000,2025-03-13,Starbucks,Starbucks,30.18,USD,Credit Card,"Boston, MA",Business expense
+TXN2004,2025-01-25,Starbucks,Starbucks Coffee,45.67,USD,Credit Card,"San Francisco, CA",Team meeting
