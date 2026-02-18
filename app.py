@@ -134,8 +134,8 @@ def call_groq_for_batch(client, df_batch: pd.DataFrame):
 For EACH transaction, you MUST:
 - Assign exactly one category from this list: {CATEGORY_LIST}
 - Decide whether it looks suspicious (true/false)
-- Provide a short reason
-- Provide a confidence score between 0 and 1
+- Provide a short reason (even if not suspicious, say "Looks normal")
+- Provide a confidence score between 0 and 1 (REQUIRED, never omit)
 
 Return ONLY a JSON object with a "results" array containing objects:
 {{
@@ -527,12 +527,19 @@ def main():
                 parts.append(row["anomaly_reasons_rule"].strip())
             if isinstance(row.get("suspicious_reason_llm"), str) and row["suspicious_reason_llm"].strip():
                 parts.append("AI: " + row["suspicious_reason_llm"].strip())
-            return " | ".join(parts)
+            return " | ".join(parts) if parts else "—"
 
         anomalies["combined_reason"] = anomalies.apply(_combine_reasons, axis=1)
 
-        # Nice-looking confidence (blank if NaN)
-        anomalies["confidence_display"] = anomalies["confidence_llm"].round(2)
+        # Clean category display (show "—" if empty/None)
+        anomalies["category_display"] = anomalies["category_llm"].apply(
+            lambda x: x if isinstance(x, str) and x.strip() else "—"
+        )
+
+        # Clean confidence display (show "—" if NaN or 0)
+        anomalies["confidence_display"] = anomalies["confidence_llm"].apply(
+            lambda x: f"{x:.2f}" if pd.notna(x) and x > 0 else "—"
+        )
 
         anomaly_cols = [
             "date",
@@ -541,7 +548,7 @@ def main():
             "description",
             "analysis_source",
             "combined_reason",
-            "category_llm",
+            "category_display",
             "confidence_display",
         ]
         existing_anomaly_cols = [c for c in anomaly_cols if c in anomalies.columns]
