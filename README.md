@@ -11,18 +11,18 @@ Live app: `https://ai-expense-categorizer.streamlit.app/`
 This project is built to mirror a real finance/ops workflow: you export a CSV from your bank or accounting tool, upload it, and in a single place you get:
 
 - Cleaned and validated data.
-- Consistent, LLM‑powered categories (Travel, Software, Meals, etc.).[file:116][file:112]
-- Automatic anomaly flags (high amounts, duplicates, out‑of‑pattern transactions).[file:116][file:112]
+- Consistent, LLM‑powered categories (Travel, Software, Meals, etc.)
+- Automatic anomaly flags (high amounts, duplicates, out‑of‑pattern transactions)
 - Summary metrics and charts that are ready for review or reporting.
-- Optional exports (CSV + PDF) for sharing with stakeholders.[file:112]
+- Optional exports (CSV + PDF) for sharing with stakeholders.
 
-It is implemented in **Python + Pandas + Streamlit**, and uses **Groq’s Llama 3.3 model via the OpenAI-compatible API** for categorization and analysis, matching the stack requested in the assessment brief.[file:116][file:112]
+It is implemented in **Python + Pandas + Streamlit**, and uses **Groq’s Llama 3.3 model via the OpenAI-compatible API** for categorization and analysis, matching the stack requested in the assessment brief.
 
 ---
 
 ## 2. How it matches the assignment
 
-The original brief asked for four core capabilities plus a set of “advanced (optional)” features.[file:116]  
+The original brief asked for four core capabilities plus a set of “advanced (optional)” features.
 This implementation intentionally hits **all** core requirements and **all** advanced ones, plus one extra bonus capability.
 
 ### ✅ Core requirements (100%)
