@@ -1,5 +1,6 @@
 import os
 import json
+import time
 
 import pandas as pd
 import numpy as np
@@ -28,8 +29,8 @@ CATEGORY_LIST = [
     "Other",
 ]
 
-BATCH_SIZE = 20
-
+BATCH_SIZE = 10          # smaller batch size to reduce tokens per request
+MAX_LLM_ROWS = 40        # only first N rows go through LLM on hosted demo
 
 # =============================
 # Groq setup
@@ -153,10 +154,10 @@ Return ONLY a JSON object with a "results" array containing objects:
     ]
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="llama3-8b-8192",  # lighter model with higher rate limits
         messages=messages,
         response_format={"type": "json_object"},
-        temperature=0.1
+        temperature=0.1,
     )
 
     text = response.choices[0].message.content
@@ -183,10 +184,32 @@ def apply_llm_categorization(df: pd.DataFrame, client) -> pd.DataFrame:
     df["confidence_llm"] = np.nan
 
     n = len(df)
-    for start in range(0, n, BATCH_SIZE):
-        end = min(start + BATCH_SIZE, n)
+    effective_n = min(n, MAX_LLM_ROWS)
+
+    if effective_n == 0:
+        return df
+
+    progress = st.progress(0.0, text=f"Categorizing first {effective_n} transactions with AI...")
+
+    for start in range(0, effective_n, BATCH_SIZE):
+        end = min(start + BATCH_SIZE, effective_n)
         batch = df.iloc[start:end]
-        mapping = call_groq_for_batch(client, batch)
+
+        # simple retry on rate limit
+        for attempt in range(3):
+            try:
+                mapping = call_groq_for_batch(client, batch)
+                break
+            except Exception as e:
+                msg = str(e).lower()
+                if "rate" in msg or "429" in msg:
+                    wait = 10 * (attempt + 1)
+                    st.warning(f"Rate limit hit — waiting {wait}s before retry...")
+                    time.sleep(wait)
+                else:
+                    st.error(f"LLM error: {e}")
+                    mapping = {}
+                    break
 
         for row_index, info in mapping.items():
             if row_index in df.index:
@@ -195,6 +218,10 @@ def apply_llm_categorization(df: pd.DataFrame, client) -> pd.DataFrame:
                 df.at[row_index, "suspicious_reason_llm"] = info["suspicious_reason_llm"]
                 df.at[row_index, "confidence_llm"] = info["confidence_llm"]
 
+        progress.progress(end / effective_n, text=f"Categorized {end}/{effective_n} transactions...")
+        time.sleep(1)  # polite delay between batches
+
+    progress.empty()
     return df
 
 
@@ -250,9 +277,10 @@ Do NOT invent data beyond what is in the JSON summary."""
     ]
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="llama3-8b-8192",
         messages=messages,
         temperature=0.2,
+        max_tokens=300,
     )
 
     return response.choices[0].message.content
@@ -270,9 +298,9 @@ def generate_pdf_report(df: pd.DataFrame) -> bytes:
 
     cat_summary = (
         df.groupby("category_llm")["amount"]
-        .sum()
-        .sort_values(ascending=False)
-        .reset_index()
+            .sum()
+            .sort_values(ascending=False)
+            .reset_index()
     )
 
     pdf = FPDF()
