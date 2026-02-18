@@ -4,9 +4,9 @@ import json
 import pandas as pd
 import numpy as np
 import streamlit as st
-import openai  # pip install openai
-import plotly.express as px  # pip install plotly
-from fpdf import FPDF       # pip install fpdf2
+import openai
+import plotly.express as px
+from fpdf import FPDF
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -37,10 +37,16 @@ BATCH_SIZE = 20
 
 @st.cache_resource
 def get_groq_client():
-    api_key = os.getenv("GROQ_API_KEY")
+    # Try Streamlit secrets first (deployed), fallback to .env (local)
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        api_key = os.getenv("GROQ_API_KEY")
+
     if not api_key:
-        st.error("GROQ_API_KEY environment variable is not set.")
+        st.error("GROQ_API_KEY is not set.")
         st.stop()
+
     return openai.OpenAI(api_key=api_key, base_url="https://api.groq.com/openai/v1")
 
 
@@ -253,7 +259,7 @@ Do NOT invent data beyond what is in the JSON summary."""
 
 
 # =============================
-# PDF export
+# PDF export (fixed for fpdf2 v2+)
 # =============================
 
 def generate_pdf_report(df: pd.DataFrame) -> bytes:
@@ -300,11 +306,8 @@ def generate_pdf_report(df: pd.DataFrame) -> bytes:
         pdf.multi_cell(0, 6, line)
         pdf.ln(1)
 
-    output = pdf.output(dest="S")
-    if isinstance(output, bytes):
-        return output
-    else:
-        return output.encode("latin1")
+    # ✅ Fixed: works on both local and Streamlit Cloud
+    return bytes(pdf.output())
 
 
 # =============================
@@ -336,7 +339,6 @@ def main():
     st.subheader("Raw Data Preview")
     st.dataframe(df.head(20), use_container_width=True)
 
-    # Initial run or re-run from sidebar button
     if run_clicked:
         with st.spinner("Running categorization and anomaly detection..."):
             client = get_groq_client()
@@ -384,8 +386,7 @@ def main():
     with col_info:
         st.caption(
             "Tip: Edit categories or fields above. "
-            "Click 'Apply edits & update analysis' to refresh rules/charts without re-calling the LLM. "
-            "If you just want the original enriched file, download it directly below."
+            "Click 'Apply edits & update analysis' to refresh without re-calling the LLM."
         )
 
     # =============================
@@ -415,10 +416,7 @@ def main():
             .reset_index()
         )
         total = df_processed["amount"].sum()
-        if total != 0:
-            cat_summary["Percent"] = (cat_summary["amount"] / total * 100).round(1)
-        else:
-            cat_summary["Percent"] = 0.0
+        cat_summary["Percent"] = (cat_summary["amount"] / total * 100).round(1) if total != 0 else 0.0
 
         fig_bar = px.bar(
             cat_summary,
@@ -463,8 +461,6 @@ def main():
             st.plotly_chart(fig_trend, use_container_width=True)
         else:
             st.write("Not enough date information for trend analysis.")
-    else:
-        st.write("No 'date' column available for trend analysis.")
 
     # =============================
     # Anomalies table
@@ -477,9 +473,8 @@ def main():
     if not anomalies.empty:
         anomaly_cols = [
             "date", "amount", "merchant", "description",
-            "anomaly_reasons_rule",
-            "suspicious_llm", "suspicious_reason_llm",
-            "category_llm", "confidence_llm",
+            "anomaly_reasons_rule", "suspicious_llm",
+            "suspicious_reason_llm", "category_llm", "confidence_llm",
         ]
         existing_anomaly_cols = [c for c in anomaly_cols if c in anomalies.columns]
         st.dataframe(anomalies[existing_anomaly_cols], use_container_width=True)
@@ -487,7 +482,7 @@ def main():
         st.write("No anomalies flagged.")
 
     # =============================
-    # Enriched / Edited data + Downloads
+    # Downloads
     # =============================
     st.subheader("Download Data")
 
@@ -496,7 +491,7 @@ def main():
     with col_dl1:
         csv_enriched = df_processed.to_csv(index=False).encode("utf-8")
         st.download_button(
-            label="Download enriched CSV (current analysis)",
+            label="Download enriched CSV",
             data=csv_enriched,
             file_name="categorized_with_anomalies_streamlit.csv",
             mime="text/csv",
@@ -521,14 +516,13 @@ def main():
         )
 
     # =============================
-    # LLM Q&A about dataset (FIXED ORDER)
+    # LLM Q&A
     # =============================
     st.subheader("Ask the AI about your expenses")
 
     if "qa_history" not in st.session_state:
         st.session_state["qa_history"] = []
 
-    # Form FIRST, handle submit, THEN render history
     with st.form("qa_form", clear_on_submit=True):
         user_q = st.text_input(
             "Ask a question about this dataset (anomalies, categories, trends, etc.)",
@@ -541,9 +535,8 @@ def main():
             client = get_groq_client()
             answer = ask_groq_about_data(client, df_processed, user_q.strip())
         st.session_state["qa_history"].append({"q": user_q.strip(), "a": answer})
-        st.rerun()  # Rerun so new Q&A appears immediately[web:100]
+        st.rerun()
 
-    # Now render full history
     for qa in st.session_state["qa_history"]:
         st.markdown(f"**You:** {qa['q']}")
         st.markdown(f"**AI:** {qa['a']}")
