@@ -30,7 +30,7 @@ CATEGORY_LIST = [
 ]
 
 BATCH_SIZE = 10
-MAX_LLM_ROWS = 40  # demo safety: only first 40 rows go through the LLM
+MAX_LLM_ROWS = 100  # demo safety: only first 40 rows go through the LLM
 
 # =============================
 # Groq setup
