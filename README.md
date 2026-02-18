@@ -27,17 +27,17 @@ This implementation intentionally hits **all** core requirements and **all** adv
 
 ### ✅ Core requirements (100%)
 
-1. **Expense data ingestion**[file:116][file:112]  
+1. **Expense data ingestion** 
    - Uploads CSV via Streamlit (`st.file_uploader`).  
    - Validates that `date`, `amount`, and `description` are present.  
    - Drops completely empty rows, normalizes string fields, and parses amounts and dates safely.
 
-2. **Expense categorization**[file:116][file:112]  
+2. **Expense categorization** 
    - Uses a fixed, standard category list: `Travel`, `Meals`, `Software`, `Utilities`, `Office Supplies`, `Salary`, `Miscellaneous`, `Other`.  
    - Sends batched transactions to the LLM with a structured JSON schema (`row_index`, `category`, `suspicious`, `suspicious_reason`, `confidence`).  
    - Ensures each row gets exactly one category from the allowed list; unknown merchants fall back to `Other`.
 
-3. **Anomaly detection**[file:116][file:112]  
+3. **Anomaly detection**
    - Rule‑based:
      - Flags unusually high amounts using the 95th percentile of `amount`.  
      - Flags negative amounts.  
@@ -46,20 +46,20 @@ This implementation intentionally hits **all** core requirements and **all** adv
      - The model also returns whether a transaction looks suspicious and why.  
    - Combined flags are exposed as `is_anomaly_rule`, `anomaly_reasons_rule`, `suspicious_llm`, and `suspicious_reason_llm`.
 
-4. **Summary report generation**[file:116][file:112]  
+4. **Summary report generation** 
    - Aggregates spend by LLM category, calculates totals and percentages.  
    - Shows overall metrics (total transactions, total amount, number of anomalies).  
    - Highlights flagged anomalies in a dedicated table.  
    - Presents everything in a clean Streamlit UI with charts and tables.
 
-5. **Error handling & reliability**[file:116][file:112]  
+5. **Error handling & reliability** 
    - Wraps CSV reading and schema validation in `try/except` with user‑friendly error messages.  
    - Validates and parses LLM JSON output defensively.  
    - Stops the app gracefully with explanations if critical configuration (like the API key) is missing.
 
 ### ✅ Advanced capabilities (100%)
 
-These were listed as “optional” in the brief; all are implemented here.[file:116][file:112]
+These were listed as “optional” in the brief; all are implemented here.
 
 1. **Monthly trend analysis**  
    - Derives a `month` column from `date` and aggregates `amount` by `month x category_llm`.  
